@@ -762,7 +762,7 @@ def stock_page():
 
         html_text = analyse_results(all_results,timeframe)
         html_output_no_fix = clean_html_response(html_text)
-        html_output = fix_html_with_embedded_markdown(html_output_no_fix)
+        html_output = fix_html_with_embedded_markdown_all(html_output_no_fix)
 
         st.components.v1.html(html_output, height=700, scrolling=True)
 
