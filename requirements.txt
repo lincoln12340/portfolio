@@ -90,7 +90,7 @@ requests==2.32.4
 requests-oauthlib==2.0.0
 rpds-py==0.25.1
 rsa==4.9.1
-serpapi
+#serpapi
 setuptools==80.9.0
 six==1.17.0
 smmap==5.0.2
