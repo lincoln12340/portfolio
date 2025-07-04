@@ -21,6 +21,7 @@ import pandas as pd
 from serpapi import GoogleSearch
 from dateutil.relativedelta import relativedelta
 import markdown2
+from bs4 import BeautifulSoup
 
 
 api_key = st.secrets["OPENAI_API_KEY"]
@@ -592,17 +593,33 @@ def clean_html_response(response):
         response = response.rstrip("```").strip()
     return response
 
-def fix_html_with_embedded_markdown(text):
-    """
-    Detects markdown sections embedded within mostly-HTML output,
-    converts them to HTML, and replaces them in the text.
-    """
-    if not text:
-        return text
+# def fix_html_with_embedded_markdown(text):
+#     """
+#     Detects markdown sections embedded within mostly-HTML output,
+#     converts them to HTML, and replaces them in the text.
+#     """
+#     if not text:
+#         return text
 
-    # Don't touch it if it's a fully valid HTML document
-    if bool(re.search(r'<html', text, re.IGNORECASE)):
-        return text
+#     # Don't touch it if it's a fully valid HTML document
+#     if bool(re.search(r'<html', text, re.IGNORECASE)):
+#         return text
+
+def fix_html_with_embedded_markdown_all(html, tags=None):
+    soup = BeautifulSoup(html, 'html.parser')
+    if tags is None:
+        tags = ['div', 'section', 'td', 'span', 'p']
+
+    for tag in soup.find_all(tags):
+        raw = tag.string
+        if raw and not re.search(r'<[a-z][\s\S]*?>', raw):
+            # If markdown is detected
+            if re.search(r'(\*\*|__|#|\* |\d+\.)', raw):
+                html_converted = markdown2.markdown(raw)
+                html_converted = re.sub(r'^<p>|</p>$', '', html_converted.strip())
+                tag.clear()
+                tag.append(BeautifulSoup(html_converted, 'html.parser'))
+    return str(soup)
 
 
 
