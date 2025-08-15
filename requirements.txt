@@ -47,7 +47,7 @@ msal==1.33.0
 multidict==6.6.3
 narwhals==2.0.1
 nest-asyncio==1.6.0
-numpy==2.3.2
+numpy
 openai==1.98.0
 openpyxl==3.1.5
 packaging==25.0
@@ -93,4 +93,5 @@ urllib3==2.5.0
 watchdog==6.0.0
 wcwidth==0.2.13
 yarl==1.20.1
+
 
